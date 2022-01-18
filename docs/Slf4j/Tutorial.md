@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Tutorial
+title: Slf4j 튜토리얼
 parent: Slf4j
-nav_order: 1
+nav_order: 2
 ---
 
-# Tutorial
+# Slf4j 튜토리얼
 해당 라이브러리는 스프링 부트 사용을 기준으로 설명 한다. 
 
 ## Dependencies
