@@ -3,38 +3,40 @@ layout: default
 title: AWS ECR
 parent: 아마존웹서비스 AWS
 nav_order: 100
-last_modified_date: 2021-02-15
+last_modified_date: 2021-02-16
 ---
 
 # AWS ECR
 
-AWS ECR 이란 Elastic Container Registry의 약자로써 아마존에서 제공하는 private 컨테이너 저장소이다. 컨테이너 저장소란 컨테이너들을 다운로드할 수 있도록 원격에서 제공해 주는 서비스이다. 컨테이너 기술을 활용한 서비스는 대표적으로 로커와 쿠버네티스가 있다.
+AWS ECR 이란 Elastic Container Registry의 약자로써 아마존에서 제공하는 private 컨테이너 저장소이다. 인증된 사용자만 원격에서 컨테이너들을  다운로드할 수 있도록 제공해 준다.
 
-컨테이너 저장소는 크게 public 저장소와 private 저장소로 나눌 수 있는데, public 저장소의 경우 공개된 곳에서 누구나 읽고 다운로드할 수 있는 반면 private는 권한이 있어야 읽고 다운로드할 수 있다. public 저장소는 주로 오픈소스 컨테이너를 공유할 때 사용하고, private 저장소는 회사 내에서 공개해서는 안 되는 서비스를 사용할 때 사용한다.
+컨테이너 저장소는 크게 public 저장소와 private 저장소로 나눌 수 있다. public 저장소는 누구나 다운로드할 수 있도록 오픈소스 컨테이너를 공유할 때 사용하고, private 저장소는 인증된 사용자만 컨테이너를 공유하고 싶을 때 사용한다.
 
 대표적인 public 컨테이너 저장소
 - docker hub
 - github container registry
 
 대표적인 private 컨테이너 저장소
-- harbor
+- harbor (오픈소스)
 - AWS ECR (Elastic Container Registry)
 - GCR (Google Container Registry)
 
-컨테이너 기반의 쿠버네티스 CI/CD 구축을 위해서 컨테이너 저장소가 반드시 필요하지만 공개된 저장소에 컨테이너를 올릴 수 없으므로, 비공개 컨테이너 저장소를 사용할 수밖에 없다. GCP, AWS, Azure 같은 클라우드 서비스를 이용한다면 클라우드에서 제공해 주는 비공개 저장소를 사용하는 것을 권장한다. 오픈소스로 직접 구축하는 것보다 학습곡선이 적으며 요금도 저렴한 편이다.
+컨테이너 기반의 쿠버네티스 CI/CD 구축을 위해서 컨테이너 저장소가 반드시 필요하지만 공개된 저장소에 컨테이너를 올릴 수 없으므로, 비공개 컨테이너 저장소를 사용한다. 이때 harbor 같은 오픈소스로 비공개 컨테이너 저장소를 구축해도 되지만 GCP, AWS, Azure 같은 클라우드 서비스를 이용한다면 클라우드에서 제공해 주는 비공개 컨테이너 저장소를 사용하는것이 구축하는데 좀더 편리하다.
 
 ## 생성하기
 
 ### 1. 레포지토리 생성하기 
 [https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository](https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository)
 
+![ecr_01.png](/meta/docs/aws/ecr_01.png)
+
 **표시여부 설정**
 
-프라이빗과  퍼블릭을 선택할 수 있는데 프라이빗을 선택하면 된다. 퍼블릭의 경우 아마존에서 제공하는 공개 컨테이너 저장소 [AWS ECR Gallery](https://gallery.ecr.aws/) 에 공유되어 다운로드 받을수 있게 된다.
+프라이빗과  퍼블릭을 선택할 수 있는데 프라이빗을 선택하면 된다. 퍼블릭의 경우 아마존에서 제공하는 공개 컨테이너 저장소 [AWS ECR Gallery](https://gallery.ecr.aws/) 에 공유되어 다운로드 받을수 있게 된다. 
 
 **리포지토리 이름**
 
-하나의 리포지토리에는 image 이름이 동일하고 tag 가 다른 이미지만 업로드할 수 있으므로 식별 가능한 어플리케이션 이름을 지정하는것이 좋다. 
+하나의 리포지토리에는 image 이름이 동일하고 tag 가 다른 이미지만 업로드할 수 있으므로 식별 가능한 어플리케이션 이름을 지정해야 한다.
 
 Docker hub 의 [Mysql Repository](https://hub.docker.com/_/mysql) 를 보면 이해할 수 있다. Mysql Repository 안에는 아래와같은 tags 가 존재한다.
 
@@ -46,15 +48,25 @@ Docker hub 의 [Mysql Repository](https://hub.docker.com/_/mysql) 를 보면 이
 - 5.7
 - 5
 
-즉 서비스 이름은 동일하고 tag 로 versioning 을 할 때 사용하는 단위가 레파지토리 이므로, 햇갈리지 않도록 본인이 서비스 하는 어플리케이션 이름을 입력한다. 만약 회사에서 사용하는 서비스가 5개라면 5개의 레파지토리를 생성해야 한다.
+즉 서비스 이름은 동일하고 tag 로 versioning 을 할 때 사용하는 단위가 레파지토리 이므로, 햇갈리지 않도록 본인이 서비스 하는 어플리케이션 이름을 입력한다. 만약 업데이트 하고자 하는 서비스가 5개라면 각각 5개의 레파지토리를 생성해야 한다.
 
-### 2. AWS CLI 설치하기
+### 2. AWS CLI 설치 및 인증정보 설정
 
-본인의 컴퓨터에서 ECR 로 이미지를 push 하기 위해서는 [AWS CLI](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/install-cliv2.html) 를 반드시 설치해야 한다. CLI 설치 이후 [credential](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) 설정 하는 부분도 잊지 않도록 하자. 
+AWS ECR 에 컨테이너 이미지를 업로드 하기 위해 AWS CLI를 설치해야 한다. 설치가 완료 되었다면 IAM 인증 정보도 함께 설정해야 한다.
 
-### 3. AWS IAM ECR 정책 추가
+**CLI 설치 방법**
 
-서비스 Elastic Container Registry 읽기 쓰기 권한 설정을 주어야 한다. 만약 정책 권한을 잘 모르겠다면 아래 JSON 을 참고 하면 된다. 편의상 ecr: * 을 사용했다. 
+[AWS CLI](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/install-cliv2.html) 링크
+
+**IAM 인증 정보 설정 방법**
+
+[AWS Credential](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) 링크
+
+### 3. AWS IAM 정책 추가
+
+IAM에서 사용자를 생성하여 인증정보를 설정했다고 하더라도 아마존은 각각의 서비스마다 권한을 따로 추가해 주어야 하므로 ECS를 사용하기 위해 추가적으로 권한을 부여해야 한다. 물론 IAM에서 모든 관리자 권한을 주면 제약 없이 사용할 수 있지만 보안상 좋은 방법은 아니므로 직접 권한을 추가하는 것이 좋다.
+
+만약 정책 권한을 잘 모르겠다면 아래 JSON 을 참고 하면 된다. 편의상 <code>ecr: *</code> 을 사용했다. IAM JSON 정책에서 사용할 수 있다.
 
 ```json
 {
@@ -70,11 +82,25 @@ Docker hub 의 [Mysql Repository](https://hub.docker.com/_/mysql) 를 보면 이
 }
 ```
 
-### 4. 푸시 명령 보기
+### 4. Push 하기
 
-이제 사전 준비는 끝났으므로 ECR 레파지토리를 클릭해서 안으로 접근하면 "푸시명령보기" 라는 버튼이있을 것이다. 그 버튼을 누르게 되면 터미널에서 사용해야 하는 명령어가 있으므로 그대로 진행 하면 된다. 당연히 도커 이미지는 미리 준비 하셔야 한다.
+생성한 레포지토리를 클릭하여 상세 페이지로 접속한다.
+
+![ecr_02.png](/meta/docs/aws/ecr_02.png)
+
+**푸시명령보기**
+
+해당 버튼을 클릭하면 각 단계별로 업로드 하는 방법에 대해 자세하게 나와있다.
+
+1. AWS CLI 를 이용하여 패스워드를 가져온뒤 docker 에 로그인 한다.
+
+해당 터미널을 성공적으로 실행하기 위해서는 당연히 도커를 실행중 상태이어야 하며, 2번~3번을 정상적으로 수행한 상태이어야 한다.
+
+2. 소스코드에 루트에 있는 <code>Dockfile</code> 에 정의한 대로 컨테이너를 생성한다.
+3. ECR에 업로드 하기 위하여 컨테이너 이미지 이름을 변경한다. <code>~~~.dkr.ecr~.com</code> 이 부분이 ecr private 저장소 주소다.
+4. 컨테이너를 push 한다.
 
 
-### 마무리
+### 자동화 CI/CD 
 
-AWS CLI 를 설치하고, 도커 이미지를 빌드하고 터미널에서 push하는 행위를 직접 하는것은 귀찮은 일이다. 이후 AWS EKS CI/CD 편에서 다루겠지만 이 조차도 자동화 하여 사용 하는 방법을 소개할 예정이다. 
+1~4번 행위를 매번 반복하는 행위는 힘든 일이다. 이걸 자동화 해주는 방법이 바로 AWS pipeline 이라는 기능이다. 물론 AWS pipeline 를 사용하기 위해서는 AWS CodeCommit, AWS CodeBuild, AWS CodeDeploy 사용법을 알아야 하므로 이는 다음 편에서 다루도록 하겠다.
