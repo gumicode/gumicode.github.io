@@ -3,6 +3,7 @@ layout: default
 title: AWS ECR
 parent: 아마존웹서비스 AWS
 nav_order: 100
+last_modified_date: 2021-02-15
 ---
 
 # AWS ECR
@@ -25,11 +26,11 @@ AWS ECR 이란 Elastic Container Registry의 약자로써 아마존에서 제공
 ## 생성하기
 
 ### 1. 레포지토리 생성하기 
-https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository
+[https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository](https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository)
 
 **표시여부 설정**
 
-프라이빗과  퍼블릭을 선택할 수 있는데 프라이빗을 선택하면 된다. 퍼블릭의 경우 아마존에서 제공하는 공개 컨테이너 저장소 https://gallery.ecr.aws/ 에 공유되어 다운로드 받을수 있게 된다.
+프라이빗과  퍼블릭을 선택할 수 있는데 프라이빗을 선택하면 된다. 퍼블릭의 경우 아마존에서 제공하는 공개 컨테이너 저장소 [AWS ECR Gallery](https://gallery.ecr.aws/) 에 공유되어 다운로드 받을수 있게 된다.
 
 **리포지토리 이름**
 
@@ -54,6 +55,7 @@ Docker hub 의 [Mysql Repository](https://hub.docker.com/_/mysql) 를 보면 이
 ### 3. AWS IAM ECR 정책 추가
 
 서비스 Elastic Container Registry 읽기 쓰기 권한 설정을 주어야 한다. 만약 정책 권한을 잘 모르겠다면 아래 JSON 을 참고 하면 된다. 편의상 ecr: * 을 사용했다. 
+
 ```json
 {
     "Version": "2012-10-17",
@@ -75,4 +77,4 @@ Docker hub 의 [Mysql Repository](https://hub.docker.com/_/mysql) 를 보면 이
 
 ### 마무리
 
-위 방법을 순서대로 진행 하셨다면 ECR에 정상적으로 컨테이너 이미지가 업로드 되었을 것이다. 하지만 AWS CLI 를 설치하고, 도커 이미지를 빌드하고 터미널에서 push하는 행위를 직접 하는것은 생각외로 귀찮은 일이다. 이후 AWS EKS CI/CD 편에서 다루겠지만 이 조차도 자동화 하여 사용 하는 방법을 소개할 예정이다. 
+AWS CLI 를 설치하고, 도커 이미지를 빌드하고 터미널에서 push하는 행위를 직접 하는것은 귀찮은 일이다. 이후 AWS EKS CI/CD 편에서 다루겠지만 이 조차도 자동화 하여 사용 하는 방법을 소개할 예정이다. 

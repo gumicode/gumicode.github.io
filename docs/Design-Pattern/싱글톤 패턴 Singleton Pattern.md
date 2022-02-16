@@ -5,8 +5,6 @@ parent: 디자인 패턴 Design Pattern
 nav_order: 100
 ---
 
-본 내용은 <code>JAVA</code> 라는 언어로 예시 코드를 작성했기에 언어를 잘 모른다면 이해하는데 어려움이 있을 수 있습니다.
-
 # 싱글톤 패턴 Singleton Pattern
 싱글톤 패턴 (Singleton Pattern)이란, 고유한 하나의 인스턴스만 제공 해 주는 클래스다.
 
@@ -28,6 +26,7 @@ nav_order: 100
 
 ```java
 public class Singleton {
+
     private static Singleton instance;
 
     private Singleton() {}
@@ -47,6 +46,7 @@ public class Singleton {
 
 ```java
 public class Singleton {
+
     private static Singleton instance;
 
     private Singleton() {}
@@ -66,6 +66,7 @@ public class Singleton {
 
 ```java
 public class Singleton {
+
     private static final Singleton INSTANCE = new Singleton();
 
     private Singleton() {}
@@ -86,6 +87,7 @@ public class Singleton {
 
 ```java
 public class Singleton {
+
     private Singleton() {}
 
     private static class SingletonHolder {
@@ -117,6 +119,7 @@ public class Singleton implements Serializable {
 
 ```java
 public static void main(String[] args) throws IOException, ClassNotFoundException {
+
         Singleton singleton1 = Singleton.getInstance();
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("single"));
@@ -139,6 +142,7 @@ public static void main(String[] args) throws IOException, ClassNotFoundExceptio
 
 ```java
 public class Singleton implements Serializable {
+
     private Singleton() {}
 
     private static class SingletonHolder {
@@ -161,6 +165,7 @@ public class Singleton implements Serializable {
 
 ```java
 public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    
         Singleton singleton1 = Singleton.getInstance(); // 정상적인 인스턴스 생성
 
         Constructor<Singleton> declaredConstructor = Singleton.class.getDeclaredConstructor();
