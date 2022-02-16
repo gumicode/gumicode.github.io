@@ -1,7 +1,7 @@
 ---
 layout: default
 title: AWS ECR
-parent: 아마존웹서비스 AWS
+parent: 아마존 웹서비스 AWS
 nav_order: 100
 last_modified_date: 2021-02-16
 ---
@@ -103,4 +103,4 @@ IAM에서 사용자를 생성하여 인증정보를 설정했다고 하더라도
 
 ### 자동화 CI/CD 
 
-1~4번 행위를 매번 반복하는 행위는 힘든 일이다. 이걸 자동화 해주는 방법이 바로 AWS pipeline 이라는 기능이다. 물론 AWS pipeline 를 사용하기 위해서는 AWS CodeCommit, AWS CodeBuild, AWS CodeDeploy 사용법을 알아야 하므로 이는 다음 편에서 다루도록 하겠다.
+1~4번 행위를 매번 반복하는 행위는 힘든 일이다. 이걸 자동화 해주는 방법이 바로 AWS pipeline 이라는 기능이다. 단, 파이프라인을 사용하기 위해서는 AWS CodeCommit, AWS CodeBuild, AWS CodeDeploy 에 대한 기초 사용법을 알아야 하므로 다음 편에서 다루도록 하겠다.
