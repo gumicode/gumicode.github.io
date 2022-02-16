@@ -2,28 +2,37 @@
 layout: default
 title: AWS ECR
 parent: 아마존 웹서비스 AWS
-nav_order: 100
+nav_order: 101
 last_modified_date: 2021-02-16
 ---
 
 # AWS ECR
+{: .no_toc }
 
-AWS ECR 이란 Elastic Container Registry의 약자로써 아마존에서 제공하는 private 컨테이너 저장소이다. 인증된 사용자만 원격에서 컨테이너들을  다운로드할 수 있도록 제공해 준다.
+## Table of contents
+{: .no_toc .text-delta }
 
-컨테이너 저장소는 크게 public 저장소와 private 저장소로 나눌 수 있다. public 저장소는 누구나 다운로드할 수 있도록 오픈소스 컨테이너를 공유할 때 사용하고, private 저장소는 인증된 사용자만 컨테이너를 공유하고 싶을 때 사용한다.
+1. TOC
+{:toc}
 
-대표적인 public 컨테이너 저장소
+---
+
+## 개요
+
+Elastic Container Registry 아마존 컨테이너 저장소
+
+주로 비공개 컨테이너 저장소로 사용한다. 공개 저장소로 사용할 수는 있으나 docker hub 같은 훨씬 방대한 서비스가 있으므로 해당 용도로는 자주 사용되진 않는다. AWS ECS 혹은, AWS EKS (아마존 쿠버네티스) 를 사용 중이며 CI/CD 구축을 하고자 한다면 컨테이너 저장소로 사용할 수 있다. harbor 같은 오픈소스 컨테이너 저장소를 직접 구축해서 사용해도 되지만 AWS 서비스를 사용하고 있다면 클라우드에서 제공해 주는 컨테이너 저장소를 사용하는 것이 편리하다.
+
+## 대표적인 서비스
+
+동일한 포지션의 대표적인 서비스는 아래와 같다. 
+
 - docker hub
 - github container registry
-
-대표적인 private 컨테이너 저장소
-- harbor (오픈소스)
-- AWS ECR (Elastic Container Registry)
 - GCR (Google Container Registry)
+- harbor
 
-컨테이너 기반의 쿠버네티스 CI/CD 구축을 위해서 컨테이너 저장소가 반드시 필요하지만 공개된 저장소에 컨테이너를 올릴 수 없으므로, 비공개 컨테이너 저장소를 사용한다. 이때 harbor 같은 오픈소스로 비공개 컨테이너 저장소를 구축해도 되지만 GCP, AWS, Azure 같은 클라우드 서비스를 이용한다면 클라우드에서 제공해 주는 비공개 컨테이너 저장소를 사용하는것이 구축하는데 좀더 편리하다.
-
-## 생성하기
+## 생성 하기
 
 ### 1. 레포지토리 생성하기 
 [https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository](https://ap-northeast-2.console.aws.amazon.com/ecr/create-repository)
@@ -100,7 +109,6 @@ IAM에서 사용자를 생성하여 인증정보를 설정했다고 하더라도
 3. ECR에 업로드 하기 위하여 컨테이너 이미지 이름을 변경한다. <code>~~~.dkr.ecr~.com</code> 이 부분이 ecr private 저장소 주소다.
 4. 컨테이너를 push 한다.
 
-
-### 자동화 CI/CD 
+## 자동화 CI/CD 
 
 1~4번 행위를 매번 반복하는 행위는 힘든 일이다. 이걸 자동화 해주는 방법이 바로 AWS pipeline 이라는 기능이다. 단, 파이프라인을 사용하기 위해서는 AWS CodeCommit, AWS CodeBuild, AWS CodeDeploy 에 대한 기초 사용법을 알아야 하므로 다음 편에서 다루도록 하겠다.
