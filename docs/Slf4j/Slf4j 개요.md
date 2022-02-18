@@ -3,6 +3,8 @@ layout: default
 title: Slf4j 개요
 parent: Slf4j
 nav_order: 1
+last_modified_date: 2021-02-18 00:00:00
+last_modified_at: 2021-02-18 00:00:00
 ---
 
 # Slf4j 개요
