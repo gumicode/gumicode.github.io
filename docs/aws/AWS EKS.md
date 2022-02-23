@@ -34,7 +34,7 @@ last_modified_at: 2021-02-24 02:50:00
 
 ## AWS CLI으로 클러스터 생성하기
 
-EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하는 방법과 AWS CLI 를 통하여 사용자 계정으로 생성하는 방법이다. AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에, 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되어 추후 터미널 에서 kubectl 을 사용할수 없으므로 추가 권한 설정이 필요하다. 이 장에는 AWS CLI 를 이용하여 설치하는 방법을 소개 하겠다. 
+EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하거나 AWS CLI 로 생성하는것이다. 그러나 이는 매우 큰 차이점이 있는데 AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되어 터미널 에서 kubectl 을 사용할수 없다. 물론 해당 기능을 활성화 하는게 불가능한건 아니지만, **우회하는 방법이 매우 불편**하므로 권장하지 않는다. 후자로 생성 하더라도 권한을 추가할 수 있으므로 걱정하지 않아도 된다. 
 
 AWS CLI 로 생성할 경우 사용자에게 마스터 권한이 부여되여 kubectl 사용시 추가 설정이 필요 없다.
 
@@ -111,7 +111,7 @@ aws eks create-cluster \
 
 만약 <code>An error occurred (AccessDeniedException) when calling the CreateCluster operation:</code> 와 같이 클러스터 생성 권한이 없다는 메세지가 발생 할 경우 2번을 정상적으로 수행 했는지 다시한번 확인하자. IAM 권한 추가의 경우 실제 적용되는데 몇분이 걸리므로 적용한지 얼마 되지 않았다면 잠깐 기다렸다가 진행 해 보자.
 
-### 클러스 연결 실패시
+### 클러스터 연결 유실시
 
 바로 생성 직후라면 자동으로 연결되어 있겠지만, 세션이 만료 되었거나 연결이 실패할 경우 래처럼 재접속 할 수 있다.
 
@@ -121,6 +121,6 @@ aws eks --region ap-northeast-2 update-kubeconfig --name {클러스터이름}
 
 **중요** EKS 는 노드를 생성하지 않더라도, 클러스터 생성시 시간당 0.1$ 고정 비용이 발생 하므로 실제 운영할 계획이 없다면 반드시 삭제하도록 하자
 
-### 워커노드 역할 생성
+## 워커노드 역할 생성
 
 [워커노드 역할생성 가이드](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role)를 참고하여 생성한다.
