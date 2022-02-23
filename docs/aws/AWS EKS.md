@@ -34,9 +34,7 @@ last_modified_at: 2021-02-24 02:50:00
 
 ## AWS CLI으로 클러스터 생성하기
 
-EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하거나 AWS CLI 로 생성하는것이다. 그러나 이는 매우 큰 차이점이 있는데 AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되어 터미널 에서 kubectl 을 사용할수 없다. 물론 해당 기능을 활성화 하는게 불가능한건 아니지만, **우회하는 방법이 매우 불편**하므로 권장하지 않는다. 후자로 생성 하더라도 권한을 추가할 수 있으므로 걱정하지 않아도 된다. 
-
-AWS CLI 로 생성할 경우 사용자에게 마스터 권한이 부여되여 kubectl 사용시 추가 설정이 필요 없다.
+EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하거나 AWS CLI 로 생성하는것이다. AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되고, 후자의 경우에는 AWS CLI 에서 설정한 사용자 계정이 마스터 권한을 가지게 된다.
 
 ### 1. IAM 역할 생성 하기
 
