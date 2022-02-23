@@ -32,9 +32,11 @@ last_modified_at: 2021-02-24 02:50:00
 - GKS (Google Kubernetes Engine) : 구글 클라우드 쿠버네티스 서비스
 - AKS (Azure Kubernetes Service) : 애저 클라우드 쿠버네티스 서비스
 
-## 클러스터 생성하기
+## AWS CLI으로 클러스터 생성하기
 
-**AWS CLI** 를 사용하여 EKS 클러스터를 생성할 것이다. AWS 사이트 콘솔에서 생성하지 않는 이유는 터미널에서 kubectl 를 사용하기 위한 권한 설정이 매우 까다롭기 때문이다.
+EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하는 방법과 AWS CLI 를 통하여 사용자 계정으로 생성하는 방법이다. AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에, 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되어 추후 터미널 에서 kubectl 을 사용할수 없으므로 추가 권한 설정이 필요하다. 이 장에는 AWS CLI 를 이용하여 설치하는 방법을 소개 하겠다. 
+
+AWS CLI 로 생성할 경우 사용자에게 마스터 권한이 부여되여 kubectl 사용시 추가 설정이 필요 없다.
 
 ### 1. IAM 역할 생성 하기
 
@@ -109,19 +111,16 @@ aws eks create-cluster \
 
 만약 <code>An error occurred (AccessDeniedException) when calling the CreateCluster operation:</code> 와 같이 클러스터 생성 권한이 없다는 메세지가 발생 할 경우 2번을 정상적으로 수행 했는지 다시한번 확인하자. IAM 권한 추가의 경우 실제 적용되는데 몇분이 걸리므로 적용한지 얼마 되지 않았다면 잠깐 기다렸다가 진행 해 보자.
 
-### 5. aws-auth ConfigMap 적용
+### 클러스 연결 실패시
 
-AWS Console 에서 생성한 EKS 클러스터를 선택하면 **현재 사용자 또는 역할이 이 EKS 클러스터에 있는 Kubernetes 객체에 액세스할 수 없습니다.** 와 같은 경고 문구를 볼 수 있다. 이는 사용자 계정으로 클러스터를 생성했기 때문에 루트 계정 콘솔로 조회가 안되기 때문에 역할 권한을 추가해 주어야 한다.
-
-[configMap 추가](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/add-user-role.html#aws-auth-configmap) 링크를 참고하도록 하자.
-
-
-### 6. EKS 클러스터 터미널 연결
-
-바로 생성 직후라면 자동으로 연결되어 있겠지만, 세션이 만료 되었을 경우 아래처럼 재접속 할 수 있다.
+바로 생성 직후라면 자동으로 연결되어 있겠지만, 세션이 만료 되었거나 연결이 실패할 경우 래처럼 재접속 할 수 있다.
 
 ```
 aws eks --region ap-northeast-2 update-kubeconfig --name {클러스터이름}
 ```
 
 **중요** EKS 는 노드를 생성하지 않더라도, 클러스터 생성시 시간당 0.1$ 고정 비용이 발생 하므로 실제 운영할 계획이 없다면 반드시 삭제하도록 하자
+
+### 워커노드 역할 생성
+
+[워커노드 역할생성 가이드](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role)를 참고하여 생성한다.
