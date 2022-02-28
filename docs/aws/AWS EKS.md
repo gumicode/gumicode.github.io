@@ -3,8 +3,8 @@ layout: default
 title: AWS EKS
 parent: 아마존 웹서비스 AWS
 nav_order: 105
-last_modified_date: 2021-02-24 02:50:00
-last_modified_at: 2021-02-24 02:50:00
+last_modified_date: 2021-02-28 16:38:00
+last_modified_at: 2021-02-28 16:38:00
 ---
 
 # AWS EKS
@@ -32,92 +32,136 @@ last_modified_at: 2021-02-24 02:50:00
 - GKS (Google Kubernetes Engine) : 구글 클라우드 쿠버네티스 서비스
 - AKS (Azure Kubernetes Service) : 애저 클라우드 쿠버네티스 서비스
 
-## AWS CLI으로 클러스터 생성하기
+## 생성하기
 
-EKS 를 생성하는 방법은 두가지가 있다. [AWS EKS Console](https://ap-northeast-2.console.aws.amazon.com/eks) 에 접속하여 직접 생성하거나 AWS CLI 로 생성하는것이다. AWS EKS 클러스터는 생성한 주체가 마스터 권한을 가져가기 때문에 전자 방식을 선택할 경우 root 계정이 마스터 권한을 획득하게 되고, 후자의 경우에는 AWS CLI 에서 설정한 사용자 계정이 마스터 권한을 가지게 된다.
+### 1. VPC 생성하기
 
-### 1. IAM 역할 생성 하기
+[AWS EKS 클러스터 VPC 생성](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/creating-a-vpc.html)를 참고하여 EKS에 알맞은 VPC 를 생성한다.
+
+### 2. CreateCluster 역할 생성
+
+클러스터를 생성하기 위해서 IAM 역할을 생성해야 한다. 생성 방법은 아래와 같다.
+
+AWS IAM -> 역할 -> AWS 서비스 -> EKS Cluster 생성 역할을 생성한다.
 
 ![eks_01.png](/meta/docs/aws/eks_01.png)
 
-AWS IAM -> 역할 -> AWS 서비스 -> EKS Cluster 생성 역할을 생성한다. 역할 이름을 기억해 둔다.
+### 3. 클러스터 생성
 
-### 2. CLI를 사용할 사용자에게 권한 부여
+[AWS EKS](https://console.aws.amazon.com/eks)를 선택하여 클러스터 생성하기 버튼을 누른다.
 
-AWS CLI 를 통하여 쿠버네티스를 사용하기 위해서는 1번에서 생성한 역할을 컨트롤 할 수 있는 권한과, EKS 를 사용할 수 있는 권한을 부여해야 한다. 
+**1단계 클러스터 구성**
+
+- **이름** : 적당한 클러스터 이름을 선택한다.
+- **Kubernetes 버전** : 적당한 버전을 선택한다. 기본으로 선택되는 버전을 권장
+- **클러스터 서비스 역할** : 2번에서 생성했던 역할을 선택한다.
+
+그 외에는 기본값으로 지정한다.
+
+**2단계 네트워크 지정**
+
+- **VPC** : 1번에서 생성한 VPC를 선택한다.
+- **서브넷** : private 서브넷 2개를 선택한다. 해당 옵션은 쿠버네티스를 관리하는 master 노드를 위치할 서브넷을 선택 하는것이다. 실제 워커노드를 배치할 서브넷을 선택하는것이 아니므로 혼동하지 않도록 하자
+- **보안그룹** : 자동으로 생성되었던 보안그룹을 선택한다. 관련 내용은 [참고](https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
+
+그 외에는 기본값으로 지정한다. 생성에는 약 10분 이상 소요된다.
+
+### 4. Amazon VPC CNI 설정
+
+기본적으로 EKS 에서는 Amazon VPC CNI 를 사용한다. 하지만 보안설정이 되어 있어 추가 설정을 하지 않으면, 포드간의 통신이 불가능하므로 기능이 정상적으로 동작하지 않는다.
+
+#### 1. OpenID Connect 공급자URL 복사
+
+[AWS EKS](https://console.aws.amazon.com/eks)로 이동하여 생성한 클러스터를 선택후 구성, 세부정보로 들어간다.
 
 ![eks_02.png](/meta/docs/aws/eks_02.png)
 
-**EKS 사용 권한 부여**
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": "eks:*",
-            "Resource": "*"
-        }
-    ]
-}
+**OpenID Connect 공급자 URL**을 그대로 복사한다.
+
+#### 2. 자격증명공급자 생성
+
+IAM -> 자격증명 공급자 탭에 들어가서 공급자 추가를 누른다. OpenID Connect 를 선택한다.
+
+![eks_03.png](/meta/docs/aws/eks_03.png)
+
+이후 복사한 URL 를 입력하고 대상에 <code>https://sts.amazon.com</code> 을 추가한다.
+
+#### 3. CNI 역할 생성
+
+IAM 역할 생성에 들어간다. 
+
+![eks_04.png](/meta/docs/aws/eks_04.png)
+
+웹 자격증명을 선택후 방금 생성한 자격증명 공급자를 선택하고 다음을 선택후, <code>AmazonEKS_CNI_Policy</code> 권한을 추가한뒤 역할 생성 버튼을 누른다.
+
+**신뢰관계 편집**
+
+방금 생성한 역할을 선택하여 신뢰정책 편집 버튼을 누른다.
+
+<code>StringEquals</code> 아래에 있는 key value 를 아래와 같이 수정한다.
+
+**수정전**
+```
+"oidc.eks.ap-northeast-2.amazonaws.com/id/094C0CE2730BED0260CA1C7674DA43A9:aud": "https://sts.amazonaws.com"
 ```
 
-**role 사용 권한 부여**
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": "iam:PassRole",
-            "Resource": "arn:aws:iam::108429674457:role/*"
-        }
-    ]
-}
+**수정후**
+```
+"oidc.eks.ap-northeast-2.amazonaws.com/id/094C0CE2730BED0260CA1C7674DA43A9:sub": "system:serviceaccount:kube-system:aws-node"
 ```
 
-### 3. EKS 클러스터용 VPC 생성하기
+#### 4. EKS CNI 역할 변경
 
-아마존에서 기본으로 생성된 VPC는 EKS 클러스러를 생성하기에 알맞지 않다. 
+[AWS EKS](https://console.aws.amazon.com/eks)로 이동하여 생성한 클러스터를 선택후 구성, 추가기능에 들어간다 .
 
-[AWS EKS 클러스터용 VPC 생성](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/creating-a-vpc.html)를 참고하여 별도의 VPC 를 생성하자.
+이후 vpc-cni 를 선택후 편집을 눌러 방금 생성한 역할로 변경한다.
 
-### 4. AWS CLI 으로 EKS 클러스터 생성
+![eks_05.png](/meta/docs/aws/eks_04.png)
 
-자세한 가이드 문서는 [AWS EKS 클러스터 생성](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-cluster.html) 을 참고
+이후 업데이트를 진행하면 CNI 권한 설정은 완료된다.
 
-커맨트명령어에 아래 명령어를 적절히 수정하여 입력한다.
+## AWS CLI 으로 kubectl 접근하기
 
+AWS Console 로 EKS 를 생성했다면, root 계정으로 쿠버네티스 마스터 권한이 있으므로 해당 계정으로 접근해야 한다.
+
+IAM 대시보드에서 루트 사용자 **액세스 키 관리**에 들어가여 루트 사용자의 키를 획득후 AWS CLI에 접근한다.
+
+
+**명령어를 입력하여 ARN 이 root로 정상적으로 잡혀 있는지 확인 한다.**
 ```
-aws eks create-cluster \
-   --region ap-northeast-2 \ 
-   --name {클러스터이름} \ 
-   --kubernetes-version 1.21 \
-   --role-arn arn:aws:iam::{AWS계정아이디}:role/{IAM역할} \
-   --resources-vpc-config subnetIds={서브넷ID},{서브넷ID},securityGroupIds={보안그룹ID}
-```
-
-- region : 리전
-- name : 원하는 클러스터 이름 입력 
-- kubernetes-version : 쿠버네티스 버전
---role-arn : {AWS계정아이디}는 숫자로 된 본인의 AWS 아이디 이다. {IAM역할}은 1번에서 생성한 역할의 이름을 입력한다.
---resources-vpc-config : 마스터노드의 {서브넷ID}와 {보안그룹ID}을 설정한다.
-
-여기서 주의할 점은 <code>--resources-vpc-config</code> 의 경우 마스터 노드 영역 이기 때문에 서브넷의 경우 public이 아닌 private 서브넷을 지정하는것이 좋다. 관련 옵션 내용은 [여기](https://docs.aws.amazon.com/cli/latest/reference/eks/create-cluster.html#options)를 참고하길 바란다. [AWS EKS 클러스터 생성](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-cluster.html) 옵션을 을 따랐다면 자동으로 생성된 private 서브넷 2개를 지정하면 된다. (반드시 2개 이상을 선택해야 한다.) 보안그룹 또한 자동으로 생성된 보안그룹을 지정한다.
-
-만약 <code>An error occurred (AccessDeniedException) when calling the CreateCluster operation:</code> 와 같이 클러스터 생성 권한이 없다는 메세지가 발생 할 경우 2번을 정상적으로 수행 했는지 다시한번 확인하자. IAM 권한 추가의 경우 실제 적용되는데 몇분이 걸리므로 적용한지 얼마 되지 않았다면 잠깐 기다렸다가 진행 해 보자.
-
-### 클러스터 연결 유실시
-
-바로 생성 직후라면 자동으로 연결되어 있겠지만, 세션이 만료 되었거나 연결이 실패할 경우 래처럼 재접속 할 수 있다.
-
-```
-aws eks --region ap-northeast-2 update-kubeconfig --name {클러스터이름}
+aws sts get-caller-identity
 ```
 
-**중요** EKS 는 노드를 생성하지 않더라도, 클러스터 생성시 시간당 0.1$ 고정 비용이 발생 하므로 실제 운영할 계획이 없다면 반드시 삭제하도록 하자
+**EKS 에 접근한다.**
+```
+aws eks --region ${region} update-kubeconfig --name ${cluster_name}
+```
+
+만약 권한이 없다는 메세지가 나온다면, 루트 계정으로 접근한건지 다시한번 확인하자.
+
+## 다른 사용자에게 kubectl 권한 부여하기 **
+
+아마존 쿠버네티스 클러스터는 생성한 유저가 마스터 권한을 가지며, 이 외의 계정은 접근을 할 수 없으므로 권한을 부여해야 한다. 일단 EKS 를 생성한 루트계정으로 kubectl 에 접근해야 한다.
+
+cinfigmap 에 접근한다.
+```
+kubectl edit -n kube-system configmap/aws-auth
+```
+
+만약 <code>Error from server (NotFound): configmaps "aws-auth" not found</code> 와 같은 에러가 난다면 [AWS cinfigmap 적용](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/add-user-role.html) 페이지를 참고하여 추가하면 된다.
+
+
+mapRoles: 과 같은 라인에 아래 문구 추가
+
+```
+  mapUsers: |
+    - userarn: {사용자 ARN}
+      username: bs
+      groups:
+        - system:masters
+```
+
+그러면 특정 사용자에게도 마스터 권한이 주어져 kubectl 를 접근할 수 있게 된다.
 
 ## 워커노드 역할 생성
 
