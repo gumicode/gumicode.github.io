@@ -1,13 +1,16 @@
 ---
 layout: default
-title: Log4j 보안 취약점 사태
-parent: Log4j
-nav_order: 100
+title: Log4j
+parent: 자바 라이브러리 Java libary
+nav_order: 200
 last_modified_date: 2021-02-18 00:00:00
 last_modified_at: 2021-02-18 00:00:00
 ---
 
-# Log4j 보안 취약점 사태
+# Log4j
+
+
+## Log4j 보안 취약점 사태
 
 [CVE-2021-44228](https://ko.wikipedia.org/wiki/Log4Shell)
 

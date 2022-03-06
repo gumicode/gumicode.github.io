@@ -84,7 +84,7 @@ IAM -> 자격증명 공급자 탭에 들어가서 공급자 추가를 누른다.
 
 ![eks_03.png](/meta/docs/aws/eks_03.png)
 
-이후 복사한 URL 를 입력하고 대상에 <code>https://sts.amazon.com</code> 을 추가한다.
+이후 복사한 URL 를 입력하고 대상에 <code>https://sts.amazonaws.com/</code> 을 추가한다.
 
 #### 3. CNI 역할 생성
 

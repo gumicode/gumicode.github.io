@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Slf4j 개요
-parent: Slf4j
-nav_order: 1
+title: Slf4j
+parent: 자바 라이브러리 Java libary
+nav_order: 201
 last_modified_date: 2021-02-18 00:00:00
 last_modified_at: 2021-02-18 00:00:00
 ---
 
-# Slf4j 개요
+# Slf4j
 
 스프링 프레임워크에서 기본 탑재된 로그 추상화 라이브러리 [공식사이트](http://www.slf4j.org/) 
 
@@ -18,3 +18,18 @@ log4j, logback 같은 logging 라이브러리를 직접 사용하지 않고 Slf4
 직접 라이브러리를 사용하는 것보다 유지 보수 및 안전성 면에서 많은 이점을 가져갈 수 있다. **파사드 패턴**의 대표적인 라이브러리라고 할 수 있다.
 
 최근에 발생한 [Log4j 보안 취약점 사태](https://namu.wiki/w/Log4j%20%EB%B3%B4%EC%95%88%20%EC%B7%A8%EC%95%BD%EC%A0%90%20%EC%82%AC%ED%83%9C?from=Log4j#Log4j) 와 같이 특정 라이브러리 특정 버전의 문제가 발생했을 때 최신버전으로 업데이트 하거나 다른 라이브러리로 비교적 손쉽게 교체할 수 있다.
+
+## Slf4j 튜토리얼
+해당 라이브러리는 스프링 부트 사용을 기준으로 설명 한다. 
+
+### Dependencies
+
+Spring boot에서 기본 탑재 되어 있기에 별도로 **의존성을 추가할 필요는 없다.**  하지만 Slf4j 를 손쉽게 사용할 수 있는 옵션인 <code>lombok</code> 을 추가하는것을 권장한다.
+
+<code>build.gradle</code>
+```gradle
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+```
