@@ -8,3 +8,13 @@ last_modified_at: 2021-02-18 00:00:00
 ---
 
 # 팩토리 메소드 패턴 Factory Method Pattern
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+

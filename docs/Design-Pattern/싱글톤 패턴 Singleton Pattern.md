@@ -8,9 +8,20 @@ last_modified_at: 2021-02-18 00:00:00
 ---
 
 # 싱글톤 패턴 Singleton Pattern
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## 개요
 싱글톤 패턴 (Singleton Pattern)이란, 고유한 하나의 인스턴스만 제공 해 주는 클래스다.
 
-## 목적
+## 사용 목적
 
 어디에서 접근하던지, 동일한 객체의 동일한 데이터를 참조하기 위함이다. 
 

