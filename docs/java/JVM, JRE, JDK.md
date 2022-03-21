@@ -3,8 +3,8 @@ layout: default
 title: JVM, JRE, JDK
 parent: 자바 Java
 nav_order: 200
-last_modified_date: 2021-03-18 00:00:00
-last_modified_at: 2021-03-18 00:00:00
+last_modified_date: 2021-03-22 02:00:00
+last_modified_at: 2021-03-22 02:00:00
 ---
 
 # JVM, JRE, JDK
