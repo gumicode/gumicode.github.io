@@ -1,10 +1,10 @@
 ---
 layout: default
-title: 디자인 패턴 Design Pattern
+title: 개발 표준 가이드 Development Standard Guide
 nav_order: 500
 has_children: true
 last_modified_date: 2021-04-25 01:20:00
 last_modified_at: 2021-04-25 01:20:00
 ---
 
-# 디자인 패턴 Design Pattern
+# 개발 표준 가이드 Development Standard Guide
