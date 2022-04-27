@@ -20,7 +20,7 @@ last_modified_at: 2021-04-27 01:55:00
 
 ## 개요
 
-클라이언트와 서버간에 통신하기 위한 규약
+협업을 위한 REST API 가이드
 
 ## URL 규칙
 
@@ -134,10 +134,10 @@ DELETE gumicode.com/accounts/123
 
 ## Response Body
 
-- 응답 데이터는 <code>JSON</code> 으로 응답 합니다.
-- key 네이밍 포맷은 <code>camel case</code> 를 사용 합니다.
-- value 값이 null 이거나 빈값인 경우는 최소화 합니다. 필요하다면 사용 합니다. value 타입이 배열인 경우 null이 아닌 [] 값을 응답 합니다.
-- 응답 데이터 포맷은 아래와 같은 규칙을 따릅니다.
+- 응답 데이터는 <code>JSON</code> 으로 응답 한다.
+- key 네이밍 포맷은 <code>camel case</code> 를 사용 한다.
+- value 값이 null 이거나 빈값인 경우는 최소화 한다. 필요하다면 사용 한다. value 타입이 배열인 경우 null이 아닌 [] 값을 응답 한다.
+- 응답 데이터 포맷은 아래와 같은 규칙을 따른다.
 
 ### 응답데이터가 없는 경우
 
@@ -207,7 +207,7 @@ DELETE gumicode.com/accounts/123
 
 ### 오류코드
 
-오류코드는 아래와 같이 문서로 함께 제공하여 사용자가 인지하기 쉽도록 합니다.
+오류코드는 아래와 같이 문서로 함께 제공하여 사용자가 인지하기 쉽도록 한다.
 
 | code | status | 설명 |
 |:--|:--|:--|
@@ -229,7 +229,7 @@ DELETE gumicode.com/accounts/123
 
 ## HTTP Status Code
 
-아래 지정된 status code 만 사용 합니다. 
+아래 지정된 status code 만 사용 한다. 
 
 | code | 설명 |
 |:--|:--|
