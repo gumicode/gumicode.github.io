@@ -3,8 +3,8 @@ layout: default
 title: 어댑터 패턴 Adapter Pattern
 parent: 디자인 패턴 Design Pattern
 nav_order: 200
-last_modified_date: 2021-04-24 21:24:00
-last_modified_at: 2021-04-24 21:24:00
+last_modified_date: 2021-04-30 03:16:00
+last_modified_at: 2021-04-30 03:16:00
 ---
 
 # 어댑터 패턴 Adapter Pattern
@@ -35,9 +35,16 @@ last_modified_at: 2021-04-24 21:24:00
 **단점**
 - 새 클래스가 생겨 복잡도가 증가할 수 있다. 경우에 따라서는 기존 코드가 해당 인터페이스를 구현하도록 수정하는것이 좋은 선택이 될 수도 있다.
 
-## 생성 예시
+## 생성 규칙
 
-아래와 같이 UserDetails 라는 인터페이스가 있고 Account 라는 클래스가 있다고 해보자.
+### 조건 예시
+
+- UserDetails 인터페이스 A 가 있다.
+- Account 클래스 B 가 있다.
+- UserDetails 의 gerUsername() 호출시 Account 의 nickname 이 출력되어야 한다.
+- 그러나 UserDetails 혹은 Account 의 코드는 직접 변경하면 안된다.
+
+### 생성 예시
 
 ```java
 public interface UserDetails {
@@ -46,7 +53,7 @@ public interface UserDetails {
 ```
 
 ```java
-public interface Account {
+public class Account {
     private String nickname;
 }
 ```
@@ -55,10 +62,10 @@ username 과 nickname 은 변수명은 서로 다르지만 동일한 데이터�
 서로 연관관계가 없는 객체들이라 서로 통신이 불가능하다. 물론 코드를 변경하는 방법이 있겠지만, 만약 Account 라는 클래스가 외부에서 주입받은 라이브러리라서 코드를 수정할 수 없을 수 있고, Account 클래스가 여러가지 이유로함부로 코드를 수정해서는 안되는 상황일 수 있다. 이럴때 어댑터 패턴을 사용할 수 있다.
 
 ```java
-public class AccountUserDetailsAdaper implements UserDetails{
+public class AccountUserDetailsAdapter implements UserDetails{
     private Account account;
 
-    public AccountUserDetailsAdaper(Account account) {
+    public AccountUserDetailsAdapter(Account account) {
         this.account = account;
     }
     @Override
