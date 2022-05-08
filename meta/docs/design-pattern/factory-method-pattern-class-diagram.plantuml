@@ -1,0 +1,45 @@
+@startuml Factory Method Pattern Class Diagram
+skinparam defaultFontName D2Coding
+
+scale 2
+title Factory Method Pattern Class Diagram
+
+interface Car {
+  +String getBrand()
+  +String getModel()
+}
+abstract class AbstractCar {
+  #String brand
+  #String model
+  +String setBrand(String brand)
+  +String setModel(String model)
+}
+class Benz {
+  +String getBrand():<<override>>
+  +String getModel():<<override>>
+}
+class Bmw {
+  +String getBrand():<<override>>
+  +String getModel():<<override>>
+}
+
+interface CarFactory {
+  +Car create(String model)
+}
+
+class BenzFactory {
+  +Car create(String model):<<override>>
+}
+
+class BmwFactory {
+  +Car create(String model):<<override>>
+}
+
+Car <|-- AbstractCar
+AbstractCar <|-- Benz
+AbstractCar <|-- Bmw
+
+CarFactory <|-- BenzFactory
+CarFactory <|-- BmwFactory
+
+@enduml

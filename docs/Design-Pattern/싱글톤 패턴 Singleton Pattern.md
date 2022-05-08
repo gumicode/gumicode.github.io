@@ -19,6 +19,7 @@ last_modified_at: 2021-02-18 00:00:00
 ---
 
 ## 개요
+
 싱글톤 패턴 (Singleton Pattern)이란, 고유한 하나의 인스턴스만 제공 해 주는 클래스다.
 
 ## 사용 목적
@@ -39,11 +40,8 @@ last_modified_at: 2021-02-18 00:00:00
 
 ```java
 public class Singleton {
-
     private static Singleton instance;
-
     private Singleton() {}
-
     public static Singleton getInstance() {
         if(instance == null) {
             this.instance = new Singleton();
@@ -59,11 +57,8 @@ public class Singleton {
 
 ```java
 public class Singleton {
-
     private static Singleton instance;
-
     private Singleton() {}
-
     public static synchronized Singleton getInstance() {
         if(instance == null) {
             this.instance = new Singleton();
@@ -79,11 +74,8 @@ public class Singleton {
 
 ```java
 public class Singleton {
-
     private static final Singleton INSTANCE = new Singleton();
-
     private Singleton() {}
-
     public static Singleton getInstance() {
         return this.INSTANCE;
     }
@@ -100,13 +92,10 @@ public class Singleton {
 
 ```java
 public class Singleton {
-
     private Singleton() {}
-
     private static class SingletonHolder {
         private static final Singleton INSTANCE = new Singleton();
     }
-
     public static Singleton getInstance() {
         return SingletonHolder.INSTANCE;
     }
@@ -132,15 +121,11 @@ public class Singleton implements Serializable {
 
 ```java
 public static void main(String[] args) throws IOException, ClassNotFoundException {
-
         Singleton singleton1 = Singleton.getInstance();
-
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("single"));
         objectOutputStream.writeObject(singleton1);
-
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("single"));
         Singleton singleton2 = (Singleton) objectInputStream.readObject();
-
         System.out.println(singleton1 == singleton2); // false
     }
 ```
@@ -155,17 +140,13 @@ public static void main(String[] args) throws IOException, ClassNotFoundExceptio
 
 ```java
 public class Singleton implements Serializable {
-
     private Singleton() {}
-
     private static class SingletonHolder {
         private static final Singleton INSTANCE = new Singleton();
     }
-
     public static Singleton getInstance() {
         return SingletonHolder.INSTANCE;
     }
-
     protected Object readResolve(){
         return getInstance();
     }
@@ -178,13 +159,10 @@ public class Singleton implements Serializable {
 
 ```java
 public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-    
         Singleton singleton1 = Singleton.getInstance(); // 정상적인 인스턴스 생성
-
         Constructor<Singleton> declaredConstructor = Singleton.class.getDeclaredConstructor();
         declaredConstructor.setAccessible(true);
         Singleton singleton2 = declaredConstructor.newInstance(); // 비 정상적으로 새로운 인스턴스 생성
-
         System.out.println(singleton1 == singleton2); // false 
     }
 ```

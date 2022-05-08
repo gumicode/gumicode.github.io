@@ -3,8 +3,8 @@ layout: default
 title: 팩토리 메소드 패턴 Factory Method Pattern
 parent: 디자인 패턴 Design Pattern
 nav_order: 101
-last_modified_date: 2021-04-30 04:08:00
-last_modified_at: 2021-04-30 04:08:00
+last_modified_date: 2021-05-02 10:34:00
+last_modified_at: 2021-05-02 10:34:00
 ---
 
 # 팩토리 메소드 패턴 Factory Method Pattern
@@ -19,118 +19,126 @@ last_modified_at: 2021-04-30 04:08:00
 ---
 
 ## 개요
-팩토리 메소드 패턴 (Factory Method Pattern)이란, 인스턴스를 생성하는 책임을 구체적인 클래스가 아닌 추상적인 인터페이스의 메서드로 감싸는 패턴이다.
 
-## 사용 목적
+팩토리 메소드 패턴 (Factory Method Pattern)이란, 인스턴스를 생성하는 책임을 구체적인 클래스가 아닌 추상적인 인터페이스의 메서드(팩토리)에게 위임하기 위해 사용한다.
+
+인스턴스 책임을 팩토리에 위임하는 이유는, 확장에 열려 있고 변경에 닫혀 있는 객체지향 원칙에 알맞도록 설계하기 위함 이다. 
+<code>Car</code> 인터페이스를 구현한 <code>Benz</code> 와 <code>Bmw</code> 구현체가 있다고 해보자. 
+<code>Benz</code> 객체를 생성하기 위해서는 <code>new Benz()</code> 를 통해 직접 생성할 수 있는데 이는 매우 직관적이지만 변경에 열려있는 상태이다.
+<code>Benz</code> 를 생성하기 위한 파라미터가 변경되거나 객체의 이름이 변경될 때 마다 <code>new Benz()</code> 를 했던 모든 부분을 수정해야 한다.
+더군다나 <code>Benz</code> <code>Bmw</code> 와 같이 비슷한 형태의 구조를 가진 구현체들이 추가 될 때마다 비슷한 중복 코드가 매번 반복될 것이다. 
+
+이를 <code>Factory</code> 를 통해 인스턴스 생성을 위임 한다면 매번 객체를 직접 생성하지 않아도 되고 객체 생성이 변경되더라도 <code>Factory</code> 구현체 한곳에서만 변경하면 된다.
+그리고 다양한 구현체가 확장 될 때마다 팩토리 구현체에서 추가하면 되고, 기존에 사용하는 비지니스 로직은 변경하지않고 재사용이 가능하다는 장점이 있다.  
 
 
-다양한 구현체를 만들 수 있는 추상화된 팩토리를 제공하기 위함이다. 팩토리를 통해서 인스턴스 생성을함으로써 프로젝트 내부에서 사용하는 특정 구현체들의 인스턴스 모음을 관리할 수 있다. 
+### 장점
 
-예를들어 자동차 라는 구현체를 만든다고 했을때 아래와 같이 다양한 클래스 (구현체) 들이 만들 수 있다.
+- 팩토리와 구현체 간의 루즈 커플링 덕분에, 구현체를 생성하는 코드를 건드리지 않고 그와 같은 종류의 새로운 구현체를 다른 방법으로 인스턴스를 생성할 수 있고 확장할 수 있다.
+- 코드는 훨씬 더 간결해지고 기존 코드가 복잡해지지 않는다.
 
-- BMW 3 시리즈
-- BMW 5 시리즈
-- BMW 7 시리즈 
-- 벤츠 C 클래스
-- 벤츠 E 클래스
-- 벤츠 S 클래스
-- 테슬라 모델 S
-- 테슬라 모델 3
-
-공통 부분은 클래스 설계적인 관점에서 인터페이스나 추상클래스로 해결할 수 있다. 그러나 오해할 수 있는것이 팩토리 메소드 패턴은 설계 관점에서 공통화된 구현체를 묶는 목적이 아니라, 공통화된 구현체들의 인스턴스를 한곳에서 생성하기 위한 목적이다. 
-
-즉, 팩토리(공장)에서 인스턴스 생성을 강제함으로써, 중간에 생성 방식이 변경될 때마다 구현체의 코드를 하나씩 수정하지 않아도 되며, 클라이언트는 수 많은 구현체를 모두 알 필요 없이 팩토리를 통한 객체 생성에만 집중할 수 있다.
-
-추가적인 기능으로 스프링을 사용할 때 팩토리를 빈 객체로 사용한다면, 팩토리를 통해 생성된 인스턴스를 한곳에서 관리하는 기능을 추가하여 관리의 용이성을 확보하는 방법도 있다.
-
-### 팩토리 메소드 장점
-
-- 구현체의 코드를 건드리지 않고 팩토리를 통해 다양한 구현체를 생성할 수 있고 확장할 수 있다.
-
-### 팩토리 메소드 단점
+### 단점
 
 - 클래스의 개수가 늘어나는 단점이 있다.
 
-## 생성 규칙
+## 생성 예시
 
-- 구현체는 팩토리를 통해서만 생성해야 한다.
+![factory-method-pattern.png](/meta/docs/design-pattern/factory-method-pattern-class-diagram.png)
 
-### 생성 예시
-
+**Car.java**
 ```java
 public interface Car {
+    String getBrand();
     String getModel();
 }
 ```
 
+**AbstractCar.java**
 ```java
-public class Bmw implements Car {
-    private String model;
-
-    public Bmw(String model) {
-        this.model = model;
+public abstract class AbstractCar implements Car{
+    protected String brand;
+    protected String model;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
-    public String getModel(){
-        return this.model;
+    public void setModel(String model) {
+        this.model = model;
     }
 }
 ```
 
+**Benz.java**
 ```java
-public class Benz implements Car {
-    private String model;
-
+public class Benz extends AbstractCar{
     public Benz(String model) {
-        this.model = model;
+        setBrand("benz");
+        setModel(model);
     }
-    public String getModel(){
+    @Override
+    public String getBrand() {
+        return this.brand;
+    }
+    @Override
+    public String getModel() {
         return this.model;
     }
 }
 ```
 
+**Bmw.java**
 ```java
-public class Tesla implements Car {
-    private String model;
-
-    public Tesla(String model) {
-        this.model = model;
+public class Bmw extends AbstractCar {
+    public Bmw(String model) {
+        setBrand("bmw");
+        setModel(model);
     }
-    public String getModel(){
+    @Override
+    public String getBrand() {
+        return this.brand;
+    }
+    @Override
+    public String getModel() {
         return this.model;
     }
 }
 ```
-
+**CarFactory.java**
 ```java
-public class CarFactory {
+public interface CarFactory {
+    Car create(String model);
+}
+```
 
-    public static create(String brand, String model) {
-
-        if("bmw".equals(brand)) {
-            return new Bmw(model);
-        }
-
-        if("benz".equals(brand)) {
-            return new Benz(model);
-        }
-
-        if("tesla".equals(brand)) {
-            return new Tesla(model);
-        }
-
-        throw new IllegalArgumentException();
+**BenzFactory.java**
+```java
+public class BenzFactory implements CarFactory {
+    @Override
+    public Car create(String model) {
+        return new Benz(model);
     }
 }
 ```
 
+**BmwFactory.java**
 ```java
-public class Example {
+public class BmwFactory implements CarFactory {
+    @Override
+    public Car create(String model) {
+        return new Bmw(model);
+    }
+}
+```
+
+**Main.java**
+```java
+public class Main {
     public static void main(String[] args) {
-        Car bmw3series = CarFactory.create("bmw", "3시리즈");
-        Car bmw5series = CarFactory.create("bmw", "5시리즈");
-        Car benzCClass = CarFactory.create("benz", "c-class");
-        Car teslaModel3 = CarFactory.create("tesla", "model3");
+        Main main = new Main();
+        Car benz = main.createCar(new BenzFactory(), "5-series");
+        Car bmw = main.createCar(new BmwFactory(), "s-class");
+    }
+    public Car createCar(CarFactory carFactory, String model) {
+        return carFactory.create(model);
     }
 }
 ```
@@ -138,10 +146,13 @@ public class Example {
 ## 실전에서 사용된 예시
 
 ### JAVA
-- java.util.Calendar#getInstance()
+
+- Calendar
 
 ### SPRING
+
 - BeanFactory
 
-## 결론
-팩토리 메소드 패턴은 아키텍처가 복잡할수록 유용하다는 장점이 있지만, 반대로 아키텍처가 단순할 경우 오히려 더 복잡성을 늘리는 결과를 초래할 수 있으므로 잘 판단하여 적용하는것이 좋다.
+## 참고
+
+팩토리 메소드 패턴에서 팩토리까지 추상화 개념을 더한것을 추상 팩토리 패턴이라고 한다.
