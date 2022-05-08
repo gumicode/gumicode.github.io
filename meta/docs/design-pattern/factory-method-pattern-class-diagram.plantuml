@@ -11,8 +11,8 @@ interface Car {
 abstract class AbstractCar {
   #String brand
   #String model
-  +String setBrand(String brand)
-  +String setModel(String model)
+  +void setBrand(String brand)
+  +void setModel(String model)
 }
 class Benz {
   +String getBrand():<<override>>

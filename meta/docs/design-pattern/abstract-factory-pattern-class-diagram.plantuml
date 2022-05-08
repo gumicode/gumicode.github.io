@@ -1,0 +1,62 @@
+@startuml Abstract Factory Pattern Class Diagram
+skinparam defaultFontName D2Coding
+
+scale 2
+title Abstract Factory Pattern Class Diagram
+
+interface Car {
+  +String getBrand()
+  +CarModel getModel()
+}
+abstract class AbstractCar {
+  #String brand
+  #CarModel model
+  +void setBrand(String brand)
+  +void setModel(CarModel model)
+}
+class Benz {
+  +String getBrand():<<override>>
+  +CarModel getModel():<<override>>
+}
+class Bmw {
+  +String getBrand():<<override>>
+  +CarModel getModel():<<override>>
+}
+
+interface CarFactory {
+  +Car create(CarModel model)
+}
+
+class BenzFactory {
+  +Car create(CarModel model):<<override>>
+}
+
+class BmwFactory {
+  +Car create(CarModel model):<<override>>
+}
+
+interface CarModel {
+
+}
+
+class BenzEClass {
+  
+}
+
+class Bmw5Series {
+  
+}
+
+
+
+Car <|-- AbstractCar
+AbstractCar <|-- Benz
+AbstractCar <|-- Bmw
+
+CarFactory <|-- BenzFactory
+CarFactory <|-- BmwFactory
+
+CarModel <|-- BenzEClass
+CarModel <|-- Bmw5Series
+
+@enduml
