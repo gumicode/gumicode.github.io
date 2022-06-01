@@ -116,7 +116,7 @@ IAM 역할 생성에 들어간다.
 
 이후 vpc-cni 를 선택후 편집을 눌러 방금 생성한 역할로 변경 한다.
 
-![eks_05.png](/meta/docs/aws/eks_04.png)
+![eks_05.png](/meta/docs/aws/eks_05.png)
 
 이후 업데이트를 진행하면 CNI 권한 설정은 완료된다.
 
