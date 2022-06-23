@@ -95,9 +95,9 @@ GET gumicode.com/accounts?name=abc
 
 응답 받을 수 있는 포맷은 <code>applicaion/json</code> 으로 통일한다.
 
-### POST, PUT, PATCH 예시
+### POST 예시
 
-POST, PUT, PATCH 을 사용할 땐 요청 body 에 json 형태의 body를 넣을 수 있다. 대신 url 에는 qeuryParam 사용을 지양한다.
+POST 요청 body 에 json 형태의 body를 넣을 수 있다. query String 및 PathVariable 를 모두 사용하지 않는다.
 
 ```
 POST gumicode.com/accounts
@@ -113,10 +113,50 @@ Content-Type: application/json
 
 응답 받을 수 있는 포맷은 <code>applicaion/json</code> 으로 통일한다.
 
+### PUT 예시
+
+PUT을 사용할 땐 요청 body 에 json 형태의 body를 넣을 수 있다. query String 및 PathVariable 를 모두 사용하지 않는다.
+PUT 의 경우에는 해당 entity 에 사용하는 모든 값을 넣어야 하며, 키를 생략했을 경우 null 값이 강제로 할당된다. PUT 의 개념은 "덮어쓰기" 이다.
+memberId 가 123가 존재 한다면 덮어쓰고, 존재하지 않으면 생성한다.
+
+```
+PUT gumicode.com/accounts
+Content-Type: application/json
+{
+    "id" : 123,
+    "name":"abc",
+    "password" : "abcd1234!"
+}
+```
+
+사용 가능한 Content-Type 은 아래 두개로 제한한다.
+- <code>application/json</code>
+- <code>multipart/fom-data</code>
+
+응답 받을 수 있는 포맷은 <code>applicaion/json</code> 으로 통일한다.
+
+### PATCH 예시
+
+PATCH 요청 body 에 json 형태의 body를 넣을 수 있다.  query String 사용을 지양하고 PathVariable 를 사용한다. 
+PATCH 의 경우 해당 entity 에 사용하는 모든 값을 넣지 않아도 된다. 키를 생략할 경우 생략된 값은 변경하지 않는다. PATCH 의 개념은 "수정하기" 이다.
+
+```
+PATCH gumicode.com/accounts/123
+Content-Type: application/json
+{
+    "name":"gumi"
+}
+```
+
+사용 가능한 Content-Type 은 아래 두개로 제한한다.
+- <code>application/json</code>
+- <code>multipart/fom-data</code>
+
+응답 받을 수 있는 포맷은 <code>applicaion/json</code> 으로 통일한다.
 
 ### DELETE 예시
 
-DELETE 를 사용할땐 요청 body 에 값을 추가하지 않는다. (응답 body는 무관) queryParam 사용도 최대한 지양한다. 이왕이면 아래와 같이 PathVariable 형태로 사용한다.
+DELETE 를 사용할땐 요청 body 에 값을 추가하지 않는다. query String 사용을 지양하고 PathVariable 를 사용한다. 
 
 ```
 DELETE gumicode.com/accounts/123
@@ -130,7 +170,7 @@ DELETE gumicode.com/accounts/123
 
 | key | value |
 |:--|:--|
-| Authentication | Bearer {access_token} |
+| Authorization | Bearer {access_token} |
 
 ## Response Body
 
