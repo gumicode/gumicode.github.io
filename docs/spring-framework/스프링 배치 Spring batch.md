@@ -79,3 +79,20 @@ Spring Batch는 로깅/추적, 트랜잭션 관리, 작업 처리 통계, 작업
 - FlowJob
     - 특정한 조건과 흐름에 따라 Step 을 구성하여 실행시키는 Job
     - Flow 객체를 실행시켜서 작업을 진행함 
+
+### JobInstance
+
+기본 개념
+
+- Job 이 실행될 때 생성되는 Job 의 논리적 실행 단위 객체로서 고유하게 식별 가능한 작업 실행을 나타냄
+- Job 의 설정과 구성은 동일하지만 Job 이 실행되는 시점에 처리하는 내용은 다르기 때문에 Job 의 실행을 구분해야 함
+    - 예를 들어 하루에 한 번 씩 배치 Job이 실행된다면 매일 실행되는 각각의 Job 을 JobInstance 로 표현 한다.
+- JobInstance 생성 및 실행
+    - 처음 시작하는 Job + JobParameter 일 경우 새로운 JobInstance 생성
+    - 이전과 동일한 Job + JobParameter 으로 실행 할 경우 이미 존재하는 JobInstance 리턴
+        - 내부적으로 JobName + jobKey (jobParameters 의 해시값) 을 가지고 JobInstance 객체를 얻음
+- Job 과는 1:N 관계
+
+BATCH_JOB_INSTANCE 테이블과 매핑
+
+- JOB_NAME (Job) 과 JOB_KEY (JobParameter 해시값) 가 동일한 데이터는 중복해서 저장할 수 없음
