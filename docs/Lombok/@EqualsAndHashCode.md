@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Lombok @EqualsAndHashCode
+title: '@EqualsAndHashCode'
 parent: Lombok
 nav_order: 100
 last_modified_date: 2022-07-11 00:31:00
 last_modified_at: 2022-07-11 00:31:00
 ---
 
-# Lombok @EqualsAndHashCode
+# @EqualsAndHashCode
 {: .no_toc }
 
 ## Table of contents
