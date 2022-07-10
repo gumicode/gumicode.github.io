@@ -1,7 +1,7 @@
 ---
 layout: default
 title: AWS EKS
-parent: 아마존 웹서비스 AWS
+parent: Amazon Web Service
 nav_order: 105
 last_modified_date: 2021-03-02 06:15:00
 last_modified_at: 2021-03-02 06:15:00

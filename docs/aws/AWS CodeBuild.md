@@ -1,7 +1,7 @@
 ---
 layout: default
 title: AWS CodeBuild
-parent: 아마존 웹서비스 AWS
+parent: Amazon Web Service
 nav_order: 102
 last_modified_date: 2021-02-18 00:00:00
 last_modified_at: 2021-02-18 00:00:00

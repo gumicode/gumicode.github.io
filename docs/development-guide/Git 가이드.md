@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Git 가이드
-parent: 개발 가이드 Development Guide
+parent: Development Guide
 nav_order: 200
 last_modified_date: 2021-04-28 01:31:00
 last_modified_at: 2021-04-28 01:31:00

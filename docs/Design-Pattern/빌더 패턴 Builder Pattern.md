@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 빌더 패턴 Builder Pattern
-parent: 디자인 패턴 Design Pattern
+parent: Design Pattern
 nav_order: 103
 last_modified_date: 2021-05-11 00:38:00
 last_modified_at: 2021-05-11 00:38:00

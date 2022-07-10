@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 추상 팩토리 패턴 Abstract Factory Pattern
-parent: 디자인 패턴 Design Pattern
+parent: Design Pattern
 nav_order: 102
 last_modified_date: 2021-05-09 01:53:00
 last_modified_at: 2021-05-09 01:53:00

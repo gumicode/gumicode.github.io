@@ -1,13 +1,13 @@
 ---
 layout: default
-title: 디자인 패턴 Design Pattern
-nav_order: 500
+title: Design Pattern
+nav_order: 200
 has_children: true
 last_modified_date: 2021-05-09 20:52:00
 last_modified_at: 2021-05-09 20:52:00
 ---
 
-# 디자인 패턴 Design Pattern
+# Design Pattern
 
 ## 객체 생성 관련 디자인 패턴
 

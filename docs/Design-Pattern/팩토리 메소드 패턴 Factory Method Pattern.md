@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 팩토리 메소드 패턴 Factory Method Pattern
-parent: 디자인 패턴 Design Pattern
+parent: Design Pattern
 nav_order: 101
 last_modified_date: 2021-05-08 22:49:00
 last_modified_at: 2021-05-08 22:49:00

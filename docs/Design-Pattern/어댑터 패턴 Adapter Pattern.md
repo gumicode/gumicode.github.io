@@ -1,7 +1,7 @@
 ---
 layout: default
 title: 어댑터 패턴 Adapter Pattern
-parent: 디자인 패턴 Design Pattern
+parent: Design Pattern
 nav_order: 200
 last_modified_date: 2021-04-30 03:16:00
 last_modified_at: 2021-04-30 03:16:00

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: REST API 가이드
-parent: 개발 가이드 Development Guide
+parent: Development Guide
 nav_order: 100
 last_modified_date: 2021-04-27 01:55:00
 last_modified_at: 2021-04-27 01:55:00

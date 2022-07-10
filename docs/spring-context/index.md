@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Spring Context
-parent: 스프링 프레임워크 Spring Framework
-nav_order: 10
+has_children: true
+nav_order: 100000
 last_modified_date: 2022-07-10 00:00:00
 last_modified_at: 2022-07-10 00:00:00
 ---
