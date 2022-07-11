@@ -1,0 +1,16 @@
+@startuml jobInstance
+skinparam defaultFontName D2Coding
+
+scale 2
+title jobInstance
+
+:JobLauncher;
+:Job\n(JobParameters);
+:JobRepository;
+if (exist?) then (yes)
+  :기존 jobInstance 리턴;
+else (no)
+  :새로운 jobInstance 생성;
+endif
+stop
+@enduml
