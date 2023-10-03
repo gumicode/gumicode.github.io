@@ -30,7 +30,7 @@ last_modified_at: 2023-10-03 17:00:00
 
 ## What Actuator
 
-스프링 부트 엑추에이터는 서비스 환경에서 필요한 다양한 기능 및 모니터링 지표를 코드 몇줄로 간단히 추가할수 있도록 기능을 제공한다.
+스프링 부트 엑추에이터는 서비스 환경에서 필요한 다양한 기능 및 모니터링 지표를 코드 몇줄로 간단히 추가할수 있도록 제공한다.
 
 필요한 의존성은 다음과 같다. web 의존성이 없으면 서버로써의 역할을 하지 못하기 때문에 함께 필요하다.
 
@@ -174,13 +174,61 @@ management.endpoints.web.exposure.exclude=health
 
 Health는 서비스 운영시 어플리케이션이 살아있는지 상태를 체크해주는 중요한 엔드포인트이다. 
 
-{: .note-title }
-> My note title
->
-> A paragraph with a custom title callout
+아직 서비스 운영 경험이 없으신 분들은 Health Check 기능이 왜 필요한지 모를 수 있다. 어플리케이션을 배포할 때는 앞 단에 로드밸런서 혹은 트래픽을 라우팅 을 관리하는 서비스가 있는데, 이때 헬스 체크를 하지 않고 트래픽을 어플리케이션으로 라우팅하게 되면 심각한 장애로 발생될 수 있다. 
 
-Default label
-{: .label }
+[http://localhost:8080/actuator/health](http://localhost:8080/actuator/health) 로 접속하면 health check 상태를 확인할 수 있다.
+```json
+{
+    "status": "UP"
+}
+```
 
+ 이때, Controller 에서 <code>@GetMapping</code> 으로 단순히 응답을 구현한 것과 무슨 차이가 있는지 의아해 하실수 있으나, 헬스체크는 단순히 어플리케이션을 성공적으로 띄웠다고 해서 끝이 아니라, 경우에 따라서는 DB Connection 등 외부 서비스와의 통신까지 헬스체크 여부에 포함하여 사용 할 수 있고, 엑추에이터는 이 기능을 코드 몇줄로 간단히 제공해 주는 역할을 한다. 
 
-아직 서비스 운영 경험이 없으신 분들은 Health Check 기능이 왜 필요한지 모를 수 있다. 실제 운영환경에서는 어플리케이션 앞 단에 로드밸런서 혹은 트래픽을 라우팅 해주는 앞단이 있는데, 이때 헬스 체크를 하지 않고 트래픽을 라우팅하게 되면 심각한 장애로 발생될 수 있다. 
+ 엑추에이터는 기본적으로 보안상의 이유로 해당 엔드포인트에서 실행중인 컴포넌트를 숨김처리하여 보여주는데, 다음과 같이 show-components 를 추가 해 주면 해당 엔드포인트에서 동작중인 모든 컴포넌트를 확인할 수 있다. 
+
+```properties
+management.endpoint.health.show-components=always
+```
+
+```json
+{
+    "status": "UP",
+    "components": {
+        "diskSpace": {
+            "status": "UP"
+        },
+        "ping": {
+            "status": "UP"
+        }
+    }
+}
+```
+
+초기에는 활성화 된 컴포넌트가 <code>diskSpace</code>, <code>ping</code> 밖에 없지만 아래에서 나열하는 컴포넌트 의존성을 추가할 경우 자동으로 등록 된다. 
+
+#### Components
+
+본 페이지에서는 주로 사용하는 대표적인 컴포넌트에 대해서만 소개 한다. [공식문서](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints.health.auto-configured-health-indicators) 에 들어가면 모든 컴포넌트 목록을 확인할 수 있다.
+
+| Component ID | Class Indicator | Description |
+|:--|:--|
+| db <b>(*)</b> | [DataSourceHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/jdbc/DataSourceHealthIndicator.java) | DataSource 가 작동 중인지 확인 합니다. |
+| diskspace | [DiskSpaceHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/system/DiskSpaceHealthIndicator.java) | 디스크 공간이 부족한지 확인합니다. |
+| jms <b>(*)</b> | [JmsHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/jms/JmsHealthIndicator.java) | JMS 브로커가 작동 중인지 확인합니다. |
+| mongo | [MongoHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/data/mongo/MongoHealthIndicator.java) | Mongo 데이터베이스가 작동 중인지 확인합니다. |
+| rabbit | [RabbitHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/amqp/RabbitHealthIndicator.java) | Rabbit 서버가 작동 중인지 확인합니다. |
+| redis <b>(*)</b> | [RedisHealthIndicator](https://github.com/spring-projects/spring-boot/tree/v3.1.4/spring-boot-project/spring-boot-actuator/src/main/java/org/springframework/boot/actuate/data/redis/RedisHealthIndicator.java) | Redis 서버가 작동 중인지 확인합니다. |
+
+해당 컴포넌트들은 기본적으로 항상 활성화 되기 때문에 특정 컴포넌트가 문제가 발생할 경우 헬스체크가 실패하여 전면 장애로 발생할 수 있다. 그러므로 안전하게 기본 실행을 비활성화 시키고 원하는 컴포넌트만 추가 하는것을 권장한다.
+
+```properties
+management.health.defaults.enabled=false
+management.health.db.enabled=true
+management.health.redis.enabled=true
+management.health.mongo.enabled=true
+```
+
+##### DataSourceHealthIndicator
+
+DataSourceHealthIndicator 를 활성화 하기 위해서 간단하게 JPA 의존성을 추가한다.
