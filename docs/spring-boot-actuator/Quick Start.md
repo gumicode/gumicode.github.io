@@ -24,7 +24,7 @@ last_modified_at: 2023-10-03 17:00:00
 
 참고한 공식 문서는 아래와 같습니다. 
 
-- [Spring Actuator](https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/)
+- [Spring Actuator](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/actuator.html)
 - [Spring Boot Actuator Web API Documentation](https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/)
 
 
