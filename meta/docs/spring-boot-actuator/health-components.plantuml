@@ -1,0 +1,21 @@
+@startwbs Spring Boot Actuator Health Endpoint components
+* Endpoint
+** Health
+*** cassandra
+*** couchbase
+*** db
+*** diskspace
+*** elasticsearch
+*** hazelcast
+*** influxdb
+*** jms
+*** ldap
+*** mail
+*** mongo
+*** neo4j
+*** ping
+*** rabbit
+*** redis
+*** livenessstate
+*** readinessstate
+@endwbs
